@@ -1,0 +1,123 @@
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 40px;
+  background: var(--brand-gradient);
+  color: var(--on-dark);
+}
+
+.header-search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 20px;
+  min-width: 0;
+}
+
+.cart-icon-btn {
+  position: relative;
+  width: 44px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--on-dark);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.cart-icon {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--accent-400);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--on-dark);
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: var(--accent-400);
+}
+
+.user-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.logout-btn {
+  background: var(--danger-500);
+  border: none;
+  color: var(--on-dark);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: var(--danger-600);
+}
+
+.header-bottom {
+  background: var(--nav-bg);
+  padding: 10px 40px;
+  color: var(--on-dark);
+}
+.header .error {
+  color: var(--danger-600);
+  font-size: 12px;
+}
+@media (max-width: 720px) {
+  .header-top {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .header-search {
+    width: 100%;
+    margin: 0;
+  }
+
+  .header-bottom {
+    padding: 10px 16px;
+  }
+}
