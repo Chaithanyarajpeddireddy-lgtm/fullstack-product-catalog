@@ -11,7 +11,7 @@ import "./ProductDetailPage.css";
 export default function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { add, updateQuantity, remove, has, getQuantity } = useCart();
+  const { add, updateQuantity, remove, has } = useCart();
 
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -28,8 +28,11 @@ export default function ProductDetailPage() {
         const data = await getProductById(id);
         setProduct(data);
 
-        const related = await getProductsByCategory(data.category);
-        setRelatedProducts(related);
+        // ✅ use category.id for related products
+        if (data.category?.id) {
+          const related = await getProductsByCategory(data.category.name);
+          setRelatedProducts(related);
+        }
       } catch {
         setError("Failed to load product.");
       } finally {
@@ -83,23 +86,15 @@ export default function ProductDetailPage() {
 
         <div className="product-container">
           <div className="left-section">
-            {/* ✅ Use image_url instead of image */}
-            <img src={product.image_url} alt={product.name} />
+            <img src={product.imageUrl} alt={product.name} />
           </div>
 
           <div className="center-section">
             <h2>{product.name}</h2>
-
-            {product.rating && (
-              <p>
-                Rating: {product.rating.rate} ({product.rating.count} reviews)
-              </p>
-            )}
-
             <h3>₹ {product.price}</h3>
             <p>{product.description}</p>
             <p>
-              <b>Category:</b> {product.category}
+              <b>Category:</b> {product.category?.name}
             </p>
           </div>
 
@@ -107,7 +102,6 @@ export default function ProductDetailPage() {
             <h3>₹ {product.price}</h3>
             <p className="stock">In Stock</p>
 
-            {/* ✅ Quantity controls */}
             <div className="quantity-controls">
               <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
               <span>{quantity}</span>
@@ -149,7 +143,6 @@ export default function ProductDetailPage() {
 
         <div className="related-products">
           <h2>More from this category</h2>
-
           <div className="related-grid">
             {relatedProducts
               .filter((item) => item.id !== product.id)

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom"; // ✅ added for navigation
 import "./ProductList.css";
 
 export default function ProductList() {
@@ -38,10 +39,15 @@ export default function ProductList() {
                   className="product-thumb"
                 />
               </td>
-              <td>{p.name}</td>
+              {/* ✅ Clicking name goes to detail page */}
+              <td>
+                <Link to={`/product/${p.id}`} className="product-link">
+                  {p.name}
+                </Link>
+              </td>
               <td>{p.description}</td>
               <td>{p.price}</td>
-              <td>{p.category?.name}</td>
+              <td>{p.category_name || p.category_id}</td>
             </tr>
           ))}
         </tbody>

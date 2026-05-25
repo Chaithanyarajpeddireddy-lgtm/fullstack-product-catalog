@@ -68,7 +68,7 @@ export default function HomePage() {
   }, [selectedCategory]);
 
   const filteredProducts = products.filter((p) =>
-    (p.title || p.name).toLowerCase().includes(searchText.toLowerCase())
+    (p.name || p.title).toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
@@ -82,7 +82,6 @@ export default function HomePage() {
 
       <Banner />
 
-      {/* ✅ Category Filter Bar */}
       <div className="category-filter">
         <button
           className={`filter-btn ${selectedCategory === "all" ? "active" : ""}`}

@@ -12,12 +12,13 @@ export default function Header({
   selectedCategory = "all",
   onCategorySelect = () => {},
 }) {
-
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
-  const user = localStorage.getItem("user");
   const navigate = useNavigate();
   const { itemCount } = useCart();
+
+  // ✅ user stored as JSON object
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     async function fetchCategories() {
@@ -35,14 +36,13 @@ export default function Header({
   const handleLogout = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("user");
+    localStorage.removeItem("jwtToken");
     navigate("/login");
   };
 
   return (
     <header className="header">
-
       <div className="header-top">
-
         <Link to="/" className="logo">
           KL<span>-CATALOG</span>
         </Link>
@@ -56,9 +56,7 @@ export default function Header({
               onClick={() => navigate("/cart")}
               aria-label="Open cart"
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="cart-icon">
-                <path d="M6.3 6.3h15l-1.4 7.1a2 2 0 0 1-2 1.6H8.1a2 2 0 0 1-2-1.6L4.5 3.8H2.8a1 1 0 1 1 0-2h2.5a1 1 0 0 1 1 .8l1 3.7Zm2.6 16.2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm9 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" />
-              </svg>
+              🛒
               {itemCount > 0 ? <span className="cart-badge">{itemCount}</span> : null}
             </button>
           )}
@@ -66,28 +64,22 @@ export default function Header({
 
         {user && (
           <div className="user-actions">
-            <span className="username">{user}</span>
+            <span className="username">{user.name}</span>
             <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
           </div>
         )}
-
       </div>
 
       <div className="header-bottom">
-
         {error && <p className="error">{error}</p>}
-
         <CategoryMenu
           categories={categories}
           selected={selectedCategory}
           onSelect={onCategorySelect}
         />
-
       </div>
-
     </header>
   );
 }
-// Improved by Chaithanya: minor readability update
