@@ -34,7 +34,7 @@ export default function ProductList() {
             <tr key={p.id}>
               <td>
                 <img
-                  src={p.image_url}
+                  src={p.imageUrl || p.image_url}
                   alt={p.name}
                   className="product-thumb"
                 />

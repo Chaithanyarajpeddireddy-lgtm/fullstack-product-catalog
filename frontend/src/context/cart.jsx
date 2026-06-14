@@ -21,7 +21,7 @@ function toCartProduct(product) {
     id: product.id,
     name: product.name || product.title,
     price: product.price,
-    image_url: product.image_url || product.image,
+    image_url: product.imageUrl || product.image_url || product.image,
     category: product.category,
   };
 }

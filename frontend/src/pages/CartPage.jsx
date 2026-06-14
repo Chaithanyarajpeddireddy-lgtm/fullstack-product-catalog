@@ -62,8 +62,8 @@ export default function CartPage() {
                     onClick={() => navigate(`/product/${product.id}`)}
                     aria-label={`Open ${product.name}`}
                   >
-                    {/* ✅ Use image_url and name */}
-                    <img src={product.image_url} alt={product.name} />
+                    {/* ✅ Use imageUrl or image_url and name */}
+                    <img src={product.imageUrl || product.image_url} alt={product.name} />
                   </button>
 
                   <div className="cart-item-info">

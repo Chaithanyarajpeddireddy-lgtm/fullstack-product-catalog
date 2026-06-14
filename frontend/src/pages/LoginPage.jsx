@@ -1,6 +1,8 @@
+
 // import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 // import "./LoginPage.css";
+// import { API } from "../services/api";
 
 // export default function LoginPage({ setIsAuthenticated }) {
 //   const [username, setUsername] = useState("");
@@ -8,107 +10,134 @@
 //   const [error, setError] = useState(null);
 //   const navigate = useNavigate();
 
-//   const handleLogin = (e) => {
-//     e.preventDefault();
+//  const handleLogin = async (e) => {
+//   e.preventDefault();
 
-//     if (!username || !password) {
-//       setError("Please enter username and password.");
-//       return;
-//     }
+//   if (!username || !password) {
+//     setError("Please enter username and password.");
+//     return;
+//   }
 
-//     // ✅ Hardcoded demo accounts
-//     const accounts = [
-//       { user: "chaithanya", pass: "demo123" },
-//       { user: "guest", pass: "guest123" },
-//     ];
+//   try {
+//     const response = await API.post("/auth/login", {
+//       username,
+//       password,
+//     });
 
-//     const match = accounts.find(
-//       (acc) => acc.user === username && acc.pass === password
+//     const data = response.data;
+
+//     localStorage.setItem("auth", "true");
+//     localStorage.setItem("jwtToken", data.token);
+
+//     localStorage.setItem(
+//       "user",
+//       JSON.stringify({
+//         id: data.id,
+//         name: data.username,
+//         role: data.role,
+//       })
 //     );
 
-//     if (match) {
-//       // ✅ Mark authenticated in React state only
-//       setIsAuthenticated(true);
-
-//       // ✅ Redirect to homepage
-//       navigate("/home");
-//     } else {
-//       setError("Invalid username or password.");
-//     }
-//   };
+//     setIsAuthenticated(true);
+//     navigate("/home");
+//   } catch (err) {
+//     setError(
+//       err.response?.data?.error ||
+//       "Invalid username or password."
+//     );
+//   }
+// };
 
 //   return (
-//     <div className="login-page">
-//       <h2>Login</h2>
-//       <form onSubmit={handleLogin} className="login-form">
-//         {error && <p className="error">{error}</p>}
+//     <div className="login-container">
+//       <div className="login-box">
+//         <h2>Login</h2>
+//         <form onSubmit={handleLogin} className="login-form">
+//           {error && <p className="error">{error}</p>}
 
-//         <div className="form-group">
-//           <label htmlFor="username">Username</label>
-//           <input
-//             id="username"
-//             type="text"
-//             value={username}
-//             onChange={(e) => setUsername(e.target.value)}
-//             placeholder="Enter username"
-//           />
-//         </div>
+//           <div className="form-group">
+//             <label htmlFor="username">Username</label>
+//             <input
+//               id="username"
+//               type="text"
+//               value={username}
+//               onChange={(e) => setUsername(e.target.value)}
+//               placeholder="Enter username"
+//             />
+//           </div>
 
-//         <div className="form-group">
-//           <label htmlFor="password">Password</label>
-//           <input
-//             id="password"
-//             type="password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             placeholder="Enter password"
-//           />
-//         </div>
+//           <div className="form-group">
+//             <label htmlFor="password">Password</label>
+//             <input
+//               id="password"
+//               type="password"
+//               value={password}
+//               onChange={(e) => setPassword(e.target.value)}
+//               placeholder="Enter password"
+//             />
+//           </div>
 
-//         <button type="submit" className="login-btn">
-//           Login
-//         </button>
-//       </form>
+//           <button type="submit" className="login-btn">
+//             Login
+//           </button>
+//         </form>
+//       </div>
 //     </div>
 //   );
 // }
 
 
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../services/api";
 import "./LoginPage.css";
 
 export default function LoginPage({ setIsAuthenticated }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+
+    setError(null);
 
     if (!username || !password) {
       setError("Please enter username and password.");
       return;
     }
 
-    // ✅ Hardcoded demo accounts (replace later with API call)
-    const accounts = [
-      { user: "chaithanya", pass: "demo123" },
-      { user: "guest", pass: "guest123" },
-    ];
+    try {
+      const response = await API.post("/auth/login", {
+        username,
+        password,
+      });
 
-    const match = accounts.find(
-      (acc) => acc.user === username && acc.pass === password
-    );
+      const data = response.data;
 
-    if (match) {
-      setIsAuthenticated(true);
       localStorage.setItem("auth", "true");
-      localStorage.setItem("user", JSON.stringify({ name: username }));
+      localStorage.setItem("jwtToken", data.token);
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id: data.id,
+          name: data.username,
+          role: data.role,
+        })
+      );
+
+      setIsAuthenticated(true);
+
       navigate("/home");
-    } else {
-      setError("Invalid username or password.");
+    } catch (err) {
+      setError(
+        err.response?.data?.error ||
+        "Invalid username or password."
+      );
     }
   };
 
@@ -116,11 +145,13 @@ export default function LoginPage({ setIsAuthenticated }) {
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
+
         <form onSubmit={handleLogin} className="login-form">
           {error && <p className="error">{error}</p>}
 
           <div className="form-group">
             <label htmlFor="username">Username</label>
+
             <input
               id="username"
               type="text"
@@ -132,6 +163,7 @@ export default function LoginPage({ setIsAuthenticated }) {
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
+
             <input
               id="password"
               type="password"
