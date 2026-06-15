@@ -2,6 +2,7 @@ package com.catalog.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,20 +25,15 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> {})
-
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/api/auth/**",
-                    "/api/categories/**",
-                    "/api/products/**",
-                    "/reviews/**"
-                ).permitAll()
-
+                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/cart/**").permitAll()
+                .requestMatchers("/reviews/**").permitAll()
                 .anyRequest().authenticated()
             )
-
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             );
@@ -54,13 +50,8 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
 
         CorsConfiguration config = new CorsConfiguration();
-
         config.setAllowCredentials(true);
-
-        config.setAllowedOrigins(
-            List.of("http://localhost:5173")
-        );
-
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
         config.setAllowedHeaders(
             List.of(
                 "Authorization",
@@ -68,7 +59,6 @@ public class SecurityConfig {
                 "Content-Type"
             )
         );
-
         config.setAllowedMethods(
             List.of(
                 "GET",
